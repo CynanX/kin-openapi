@@ -97,6 +97,11 @@ func ValidateRequest(ctx context.Context, input *RequestValidationInput) error {
 			}
 			me = append(me, err)
 		}
+	} else if requestBody == nil && !options.ExcludeRequestBody && input.Request.ContentLength > 0 {
+		return &RequestError{
+				Input: input,
+				Err:   fmt.Errorf("request body not allowed for this request"),
+			}
 	}
 
 	if len(me) > 0 {
